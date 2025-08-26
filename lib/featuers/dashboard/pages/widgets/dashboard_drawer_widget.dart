@@ -1,13 +1,23 @@
+import 'package:chatty/featuers/dashboard/providers/dashboard_provider.dart';
 import 'package:chatty/utils/helper/divider_helper.dart';
 import 'package:chatty/utils/helper/style_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class DashboardDrawerWidget extends StatelessWidget {
-  final Function(int) changePage;
-  const DashboardDrawerWidget({required this.changePage, super.key});
+class DashboardDrawerWidget extends ConsumerWidget {
+  const DashboardDrawerWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.read(userProvider);
+    final pageIndexNotifier = ref.read(pageIndexProvider.notifier);
+
+    void changePage(int index) {
+      pageIndexNotifier.state = index;
+      context.pop();
+    }
+
     return Drawer(
       child: Column(
         children: [
@@ -20,30 +30,38 @@ class DashboardDrawerWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.white,
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      child: const Icon(
-                        Icons.person_outline_outlined,
-                        size: 75,
-                      ),
-                    ),
+                    user?.photoURL != null
+                        ? ClipOval(
+                            child: Image.network(
+                            user!.photoURL!,
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
+                          ))
+                        : Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              color: Colors.white,
+                            ),
+                            padding: const EdgeInsets.all(10),
+                            child: const Icon(
+                              Icons.person_outline_outlined,
+                              size: 40,
+                            ),
+                          ),
                     h(1),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Fachrul Rozi",
+                            user?.displayName ?? "-",
                             style: text(context)
                                 .bodyLarge!
                                 .copyWith(color: Colors.white),
                           ),
                           Text(
-                            "ffchrulrozi@gmail.com",
+                            user?.email ?? "-",
                             style: text(context).bodyMedium!.copyWith(
                                 color: Colors.white,
                                 overflow: TextOverflow.ellipsis),
@@ -67,8 +85,8 @@ class DashboardDrawerWidget extends StatelessWidget {
           ),
           InkWell(
             onTap: () => changePage(2),
-            child:
-                const DrawerMenuItem("Statuses", Icons.align_horizontal_left_rounded),
+            child: const DrawerMenuItem(
+                "Statuses", Icons.align_horizontal_left_rounded),
           ),
           InkWell(
             onTap: () => changePage(3),

@@ -18,7 +18,7 @@ final appRoutes = GoRouter(
     ),
     GoRoute(
       path: PATH.LOGIN,
-      builder: (_, __) =>const ProviderScope(child:AuthLoginPage()),
+      builder: (_, __) => const AuthLoginPage(),
     ),
     GoRoute(
       path: PATH.DASHBOARD,
