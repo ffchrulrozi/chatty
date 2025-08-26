@@ -5,6 +5,7 @@ import 'package:chatty/featuers/dashboard/pages/dashboard_page.dart';
 import 'package:chatty/featuers/splash/pages/splash_page.dart';
 import 'package:chatty/routes/paths.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -17,7 +18,7 @@ final appRoutes = GoRouter(
     ),
     GoRoute(
       path: PATH.LOGIN,
-      builder: (_, __) => const AuthLoginPage(),
+      builder: (_, __) =>const ProviderScope(child:AuthLoginPage()),
     ),
     GoRoute(
       path: PATH.DASHBOARD,
