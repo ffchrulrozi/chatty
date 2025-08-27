@@ -6,20 +6,19 @@ import 'package:chatty/featuers/profile/page/profile_page.dart';
 import 'package:chatty/featuers/setting/page/setting_page.dart';
 import 'package:chatty/featuers/star/page/star_page.dart';
 import 'package:chatty/featuers/status/page/status_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    int pageIndex = ref.watch(pageIndexProvider);
     return Scaffold(
       appBar: AppBar(title: const Text("Chatty")),
       body: IndexedStack(
-        index: ref.watch(pageIndexProvider),
+        index: pageIndex,
         children: const [
           ChatListPage(),
           ProfilePage(),
@@ -30,6 +29,16 @@ class DashboardPage extends ConsumerWidget {
         ],
       ),
       drawer: const DashboardDrawerWidget(),
+      floatingActionButton: pageIndex == 0
+          ? FloatingActionButton(
+              backgroundColor: Colors.blue,
+              onPressed: () => (),
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            )
+          : null,
     );
   }
 }
