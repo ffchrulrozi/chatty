@@ -1,10 +1,9 @@
 import 'package:chatty/featuers/auth/pages/auth_login_page.dart';
 import 'package:chatty/featuers/chat/pages/chat_personal_page.dart';
-import 'package:chatty/featuers/chat/providers/chat_provider.dart';
+import 'package:chatty/featuers/chat/providers/chat_personal_provider.dart';
 import 'package:chatty/featuers/dashboard/pages/dashboard_page.dart';
 import 'package:chatty/featuers/splash/pages/splash_page.dart';
 import 'package:chatty/routes/paths.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,29 +14,24 @@ final appRoutes = GoRouter(
   routes: [
     GoRoute(
       path: PATH.SPLASH,
-      builder: (_, __) => const SplashPage(),
+      builder: (_, __) => const ProviderScope(child:  SplashPage()),
     ),
     GoRoute(
       path: PATH.LOGIN,
-      builder: (_, __) => const ProviderScope(child: AuthLoginPage()),
+      builder: (_, __) => const ProviderScope(child:  AuthLoginPage()),
     ),
     GoRoute(
       path: PATH.DASHBOARD,
-      builder: (_, __) => const ProviderScope(child: DashboardPage()),
+      builder: (_, __) => const ProviderScope(child:  DashboardPage()),
     ),
     GoRoute(
       path: PATH.CHAT_PERSONAL.path,
       builder: (context, state) {
-        String myEmail = FirebaseAuth.instance.currentUser!.email!;
-        String receiverEmail = state.pathParameters['id']!;
-        String chatId = myEmail.hashCode <= receiverEmail.hashCode
-            ? "$myEmail#$receiverEmail"
-            : "$receiverEmail#$myEmail";
+        String id = state.pathParameters['id']!;
 
         return ProviderScope(
           overrides: [
-            chatIdProvider.overrideWithValue(chatId),
-            receiverEmailProvider.overrideWithValue(receiverEmail),
+            chatIdProvider.overrideWithValue(id),
           ],
           child: const ChatPersonalPage(),
         );
