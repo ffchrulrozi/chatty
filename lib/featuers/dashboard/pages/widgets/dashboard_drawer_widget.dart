@@ -85,20 +85,24 @@ class DashboardDrawerWidget extends ConsumerWidget {
           ),
           InkWell(
             onTap: () => changePage(2),
+            child: const DrawerMenuItem("Contacts", Icons.chat),
+          ),
+          InkWell(
+            onTap: () => changePage(3),
             child: const DrawerMenuItem(
                 "Statuses", Icons.align_horizontal_left_rounded),
           ),
           InkWell(
-            onTap: () => changePage(3),
+            onTap: () => changePage(4),
             child: const DrawerMenuItem("Channels", Icons.adjust_sharp),
           ),
           InkWell(
-            onTap: () => changePage(4),
+            onTap: () => changePage(5),
             child: const DrawerMenuItem("Stared", Icons.star_border_purple500),
           ),
           const Divider(),
           InkWell(
-            onTap: () => changePage(5),
+            onTap: () => changePage(6),
             child: const DrawerMenuItem("Setting", Icons.settings),
           ),
         ],

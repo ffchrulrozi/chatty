@@ -1,6 +1,7 @@
 import 'package:chatty/featuers/auth/pages/auth_login_page.dart';
 import 'package:chatty/featuers/chat/pages/chat_personal_page.dart';
 import 'package:chatty/featuers/chat/providers/chat_personal_provider.dart';
+import 'package:chatty/featuers/contact/pages/contact_add_page.dart';
 import 'package:chatty/featuers/dashboard/pages/dashboard_page.dart';
 import 'package:chatty/featuers/splash/pages/splash_page.dart';
 import 'package:chatty/routes/paths.dart';
@@ -14,15 +15,19 @@ final appRoutes = GoRouter(
   routes: [
     GoRoute(
       path: PATH.SPLASH,
-      builder: (_, __) => const ProviderScope(child:  SplashPage()),
+      builder: (_, __) => const ProviderScope(child: SplashPage()),
     ),
     GoRoute(
       path: PATH.LOGIN,
-      builder: (_, __) => const ProviderScope(child:  AuthLoginPage()),
+      builder: (_, __) => const ProviderScope(child: AuthLoginPage()),
     ),
     GoRoute(
       path: PATH.DASHBOARD,
-      builder: (_, __) => const ProviderScope(child:  DashboardPage()),
+      builder: (_, __) => const ProviderScope(child: DashboardPage()),
+    ),
+    GoRoute(
+      path: PATH.CONTACT_ADD,
+      builder: (_, __) => const ProviderScope(child: ContactAddPage()),
     ),
     GoRoute(
       path: PATH.CHAT_PERSONAL.path,
