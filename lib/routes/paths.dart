@@ -3,6 +3,7 @@ class PATH {
   static const String LOGIN = "/login";
   static const String DASHBOARD = "/dashboard";
   static const String CONTACT_ADD = '/contact/add';
+  static ParamedPath CONTACT_DETAIL = ParamedPath("/contact/detail/:id", "/contact/detail");
   static ParamedPath CHAT_PERSONAL = ParamedPath("/chat/:id", "/chat");
 }
 

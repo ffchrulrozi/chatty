@@ -2,6 +2,8 @@ import 'package:chatty/featuers/auth/pages/auth_login_page.dart';
 import 'package:chatty/featuers/chat/pages/chat_personal_page.dart';
 import 'package:chatty/featuers/chat/providers/chat_personal_provider.dart';
 import 'package:chatty/featuers/contact/pages/contact_add_page.dart';
+import 'package:chatty/featuers/contact/pages/contact_detail_page.dart';
+import 'package:chatty/featuers/contact/providers/contact_provider.dart';
 import 'package:chatty/featuers/dashboard/pages/dashboard_page.dart';
 import 'package:chatty/featuers/splash/pages/splash_page.dart';
 import 'package:chatty/routes/paths.dart';
@@ -29,6 +31,17 @@ final appRoutes = GoRouter(
       path: PATH.CONTACT_ADD,
       builder: (_, __) => const ProviderScope(child: ContactAddPage()),
     ),
+    GoRoute(
+        path: PATH.CONTACT_DETAIL.path,
+        builder: (context, state) {
+          String id = state.pathParameters["id"]!;
+          return ProviderScope(
+            overrides: [
+              contactDetailIdProvider.overrideWithValue(id),
+            ],
+            child: const ContactDetailPage(),
+          );
+        }),
     GoRoute(
       path: PATH.CHAT_PERSONAL.path,
       builder: (context, state) {

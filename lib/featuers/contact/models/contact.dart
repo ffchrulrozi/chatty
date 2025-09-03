@@ -40,3 +40,38 @@ class NewContact {
     };
   }
 }
+
+class EditContact {
+  final String name;
+  final String email;
+
+  const EditContact({
+    required this.name,
+    required this.email,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'email': email,
+    };
+  }
+}
+
+class DetailContact {
+  final String name;
+  final String email;
+
+  const DetailContact({
+    required this.name,
+    required this.email,
+  });
+
+  factory DetailContact.fromDoc(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return DetailContact(
+      name: data['name'],
+      email: data['email'],
+    );
+  }
+}
