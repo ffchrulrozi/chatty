@@ -1,3 +1,4 @@
+import 'package:chatty/featuers/auth/providers/auth_provider.dart';
 import 'package:chatty/featuers/dashboard/providers/dashboard_provider.dart';
 import 'package:chatty/utils/helper/divider_helper.dart';
 import 'package:chatty/utils/helper/style_helper.dart';
@@ -99,6 +100,11 @@ class DashboardDrawerWidget extends ConsumerWidget {
           InkWell(
             onTap: () => changePage(6),
             child: const DrawerMenuItem("Setting", Icons.settings),
+          ),
+          const Spacer(),
+          InkWell(
+            onTap: () => ref.read(authProvider.notifier).logout(),
+            child: const DrawerMenuItem("Logout", Icons.logout),
           ),
         ],
       ),

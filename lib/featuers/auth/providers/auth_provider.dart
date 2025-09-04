@@ -47,7 +47,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
-      
+
       await FirebaseAuth.instance.signInWithCredential(credential);
       navigatorKey.currentContext?.go(PATH.DASHBOARD.path);
     }
@@ -66,6 +66,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
       GoogleSignInExceptionCode.canceled => 'Sign in canceled',
       _ => 'GoogleSignInException ${e.code}: ${e.description}',
     };
+  }
+
+  void logout() {
+    FirebaseAuth.instance.signOut();
+    navigatorKey.currentContext?.go(PATH.LOGIN.path);
   }
 }
 
