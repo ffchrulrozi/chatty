@@ -49,7 +49,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       
       await FirebaseAuth.instance.signInWithCredential(credential);
-      navigatorKey.currentContext?.go(PATH.DASHBOARD);
+      navigatorKey.currentContext?.go(PATH.DASHBOARD.path);
     }
   }
 

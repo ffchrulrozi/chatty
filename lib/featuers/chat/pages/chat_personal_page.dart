@@ -1,9 +1,11 @@
-import 'package:chatty/assets/assets.gen.dart';
 import 'package:chatty/featuers/chat/pages/widgets/chat_personal_message_box_widget.dart';
 import 'package:chatty/featuers/chat/providers/chat_personal_provider.dart';
+import 'package:chatty/routes/paths.dart';
+import 'package:chatty/shared/widgets/profile_image_widget.dart';
 import 'package:chatty/utils/helper/divider_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ChatPersonalPage extends ConsumerWidget {
   const ChatPersonalPage({super.key});
@@ -11,20 +13,18 @@ class ChatPersonalPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final inputController = TextEditingController();
+    final receiverName = ref.read(receiverNameProvider);
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go(PATH.DASHBOARD.path),
+        ),
         title: Row(children: [
-          ClipOval(
-            child: Image.asset(
-              Assets.lib.assets.img.logo.path,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-            ),
-          ),
+          ProfileImageWidget(receiverName, 0),
           h(1),
-          const Text("xx")
+          Text(receiverName)
         ]),
       ),
       body: Column(

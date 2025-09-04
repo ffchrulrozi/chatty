@@ -1,6 +1,6 @@
-import 'package:chatty/assets/assets.gen.dart';
 import 'package:chatty/featuers/chat/providers/chat_provider.dart';
 import 'package:chatty/routes/paths.dart';
+import 'package:chatty/shared/widgets/profile_image_widget.dart';
 import 'package:chatty/utils/ext/date_ext.dart';
 import 'package:chatty/utils/helper/divider_helper.dart';
 import 'package:chatty/utils/helper/style_helper.dart';
@@ -9,11 +9,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ChatListPage extends ConsumerWidget {
+class ChatListPage extends ConsumerStatefulWidget {
   const ChatListPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ChatListPage> createState() => _ChatListPageState();
+}
+
+class _ChatListPageState extends ConsumerState<ChatListPage> {
+  Map<dynamic, dynamic> contacts = {};
+
+  @override
+  void initState() {
+    super.initState();
+    
+    Future.microtask(() async {
+      final contactTmps = await ref.read(contactProvider);
+      setState(() {
+        contacts = contactTmps;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final String currentUserEmail = FirebaseAuth.instance.currentUser!.email!;
     final chatStreaming = ref.watch(chatProvider);
 
@@ -23,21 +42,19 @@ class ChatListPage extends ConsumerWidget {
           itemCount: chats.length,
           itemBuilder: (context, index) {
             var chat = chats[index];
+            final toEmail =
+                chat.participants.where((x) => x != currentUserEmail).first;
+
+            final toName = contacts[toEmail] ?? toEmail;
+
             return InkWell(
               onTap: () =>
-                  context.push("${PATH.CHAT_PERSONAL.name}/${chat.id}"),
+                  context.push("${PATH.CHAT_PERSONAL.name}/${chat.id}?name=$toName"),
               child: Container(
                 padding: const EdgeInsets.all(20),
                 child: Row(
                   children: [
-                    ClipOval(
-                      child: Image.asset(
-                        Assets.lib.assets.img.logo.path,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    ProfileImageWidget(toName, index),
                     h(1.5),
                     Expanded(
                       child: Column(
@@ -46,9 +63,7 @@ class ChatListPage extends ConsumerWidget {
                           Row(
                             children: [
                               Text(
-                                chat.participants
-                                    .where((x) => x != currentUserEmail)
-                                    .first,
+                                toName,
                                 style: text(context).titleMedium,
                               ),
                               const Spacer(),

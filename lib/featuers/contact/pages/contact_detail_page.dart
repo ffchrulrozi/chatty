@@ -59,7 +59,7 @@ class _ContactDetailPageState extends ConsumerState<ContactDetailPage> {
                         formNameController.text,
                         formEmailController.text,
                       );
-                  navigatorKey.currentContext?.go(PATH.DASHBOARD);
+                  navigatorKey.currentContext?.go(PATH.DASHBOARD.path);
                 },
                 child: const Text("Save Changes"),
               ),
@@ -84,7 +84,7 @@ class _ContactDetailPageState extends ConsumerState<ContactDetailPage> {
                                     .read(contactNotifierProvider.notifier)
                                     .delete();
 
-                                context.go(PATH.DASHBOARD);
+                                context.go(PATH.DASHBOARD.path);
                               },
                               child: const Text("Delete"),
                             ),

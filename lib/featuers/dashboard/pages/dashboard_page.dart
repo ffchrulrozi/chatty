@@ -1,6 +1,5 @@
 import 'package:chatty/featuers/channel/pages/channel_page.dart';
 import 'package:chatty/featuers/chat/pages/chat_list_page.dart';
-import 'package:chatty/featuers/chat/providers/chat_provider.dart';
 import 'package:chatty/featuers/contact/pages/contact_list_page.dart';
 import 'package:chatty/featuers/dashboard/pages/widgets/dashboard_drawer_widget.dart';
 import 'package:chatty/featuers/dashboard/providers/dashboard_provider.dart';
@@ -50,9 +49,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
       case 0:
         return FloatingActionButton(
           backgroundColor: Colors.blue,
-          onPressed: () => ref
-              .read(newChatNotifierProvider.notifier)
-              .newChat("ffachrulrozii@gmail.com"),
+          onPressed: () => context.push(PATH.CHAT_LIST_CONTACT.path),
           child: const Icon(
             Icons.add,
             color: Colors.white,
@@ -62,7 +59,7 @@ class FloatingActionButtonWidget extends StatelessWidget {
       case 2:
         return FloatingActionButton.extended(
           backgroundColor: Colors.blue,
-          onPressed: () => context.push(PATH.CONTACT_ADD),
+          onPressed: () => context.push(PATH.CONTACT_ADD.path),
           label: const Row(
             children: [
               Icon(

@@ -39,7 +39,7 @@ class ContactAddPage extends ConsumerWidget {
                           formEmailController.text,
                         );
 
-                    navigatorKey.currentContext?.go(PATH.DASHBOARD);
+                    navigatorKey.currentContext?.go(PATH.DASHBOARD.path);
                   },
                   child: const Text("Save"))
             ],

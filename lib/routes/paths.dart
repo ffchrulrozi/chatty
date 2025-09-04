@@ -1,10 +1,11 @@
 class PATH {
-  static const String SPLASH = "/";
-  static const String LOGIN = "/login";
-  static const String DASHBOARD = "/dashboard";
-  static const String CONTACT_ADD = '/contact/add';
+  static ParamedPath SPLASH = ParamedPath("/", "/");
+  static ParamedPath LOGIN = ParamedPath("/login", "/login") ;
+  static ParamedPath DASHBOARD = ParamedPath("/dashboard", "/dashboard");
+  static ParamedPath CONTACT_ADD = ParamedPath('/contact/add', '/contact/add') ;
   static ParamedPath CONTACT_DETAIL = ParamedPath("/contact/detail/:id", "/contact/detail");
-  static ParamedPath CHAT_PERSONAL = ParamedPath("/chat/:id", "/chat");
+  static ParamedPath CHAT_LIST_CONTACT = ParamedPath("/chat/list-contact", "/chat/list-contact");
+  static ParamedPath CHAT_PERSONAL = ParamedPath("/chat/personal/:id", "/chat/personal");
 }
 
 class ParamedPath {

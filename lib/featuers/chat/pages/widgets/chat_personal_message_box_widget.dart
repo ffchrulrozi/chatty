@@ -9,7 +9,7 @@ class ChatPersonalMessageBoxWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final myEmail = ref.read(myEmailProvider);
+    final currentUserEmail = ref.read(currentUserEmailProvider);
     final messageStreming = ref.watch(messageProvider);
 
     return messageStreming.when(
@@ -19,7 +19,7 @@ class ChatPersonalMessageBoxWidget extends ConsumerWidget {
           itemCount: messages.length,
           itemBuilder: (context, index) {
             final message = messages[index];
-            var isByMe = message.createdBy == myEmail;
+            var isByMe = message.createdBy == currentUserEmail;
 
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 15),

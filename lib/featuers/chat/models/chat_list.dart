@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NewChat {
+  final String key;
   final List<String> participants;
   final String? lastMessage;
   final DateTime? updatedAt;
   final String? updatedBy;
 
   NewChat({
+    required this.key,
     required this.participants,
     this.lastMessage,
     this.updatedAt,
@@ -15,6 +17,7 @@ class NewChat {
 
   Map<String, dynamic> toMap() {
     return {
+      'key': key,
       'participants': FieldValue.arrayUnion(participants),
       'lastMessage': lastMessage ?? '',
       'updatedAt': updatedAt ?? DateTime.now(),

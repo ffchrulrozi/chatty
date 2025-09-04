@@ -6,14 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-final myEmailProvider =
+final currentUserEmailProvider =
     Provider<String>((ref) => FirebaseAuth.instance.currentUser!.email!);
 
 final chatProvider = StreamProvider<List<Chat>>((ref) {
-  final myEmail = ref.read(myEmailProvider);
+  final currentUserEmail = ref.read(currentUserEmailProvider);
   return FirebaseFirestore.instance
       .collection('chats')
-      .where('participants', arrayContains: myEmail)
+      .where('participants', arrayContains: currentUserEmail)
       .where('updatedBy', isNotEqualTo: '')
       .orderBy('updatedAt', descending: true)
       .snapshots()
@@ -22,25 +22,73 @@ final chatProvider = StreamProvider<List<Chat>>((ref) {
       );
 });
 
+final contactProvider = Provider<Future<Map<dynamic, dynamic>>>((ref) async {
+  final contactsSnap = await FirebaseFirestore.instance
+      .collection('contacts')
+      .where('createdBy', isEqualTo: ref.read(currentUserEmailProvider))
+      .get();
+
+  final contacts = contactsSnap.docs.map((d) => d.data()).toList();
+  final contactMap = {
+    for (var c in contacts) c['email']: c['name'],
+  };
+  return contactMap;
+});
+
 final newChatNotifierProvider =
     StateNotifierProvider<NewChatNotifier, void>((ref) {
-  final myEmail = ref.read(myEmailProvider);
-  return NewChatNotifier(myEmail);
+  final currentUserEmail = ref.read(currentUserEmailProvider);
+  return NewChatNotifier(currentUserEmail);
 });
 
 class NewChatNotifier extends StateNotifier<void> {
-  final String myEmail;
-  NewChatNotifier(this.myEmail) : super(null);
+  final String currentUserEmail;
+  NewChatNotifier(this.currentUserEmail) : super(null);
 
   Future<void> newChat(String toEmail) async {
-    final chat = NewChat(
-      participants: <String>[myEmail, toEmail],
-    ).toMap();
+    final String chatId;
 
-    final refChat =
-        await FirebaseFirestore.instance.collection("chats").add(chat);
+    var data = (await FirebaseFirestore.instance
+            .collection('chats')
+            .where('participants', arrayContains: currentUserEmail)
+            .where('key', isEqualTo: _chatKey(currentUserEmail, toEmail))
+            .get())
+        .docs;
+
+    if (data.isNotEmpty) {
+      chatId = data.first.id;
+    } else {
+      final chat = NewChat(
+        key: _chatKey(currentUserEmail, toEmail),
+        participants: [currentUserEmail, toEmail],
+      ).toMap();
+
+      chatId =
+          (await FirebaseFirestore.instance.collection("chats").add(chat)).id;
+    }
+
+    final name = await _getContactName(currentUserEmail, toEmail);
 
     navigatorKey.currentContext
-        ?.push("${PATH.CHAT_PERSONAL.name}/${refChat.id}");
+        ?.go("${PATH.CHAT_PERSONAL.name}/$chatId?name=$name");
+  }
+
+  String _chatKey(String currentUserEmail, String toEmail) {
+    return currentUserEmail.hashCode <= toEmail.hashCode
+        ? "${currentUserEmail}__$toEmail"
+        : "${toEmail}__$currentUserEmail";
+  }
+
+  Future<String> _getContactName(String currentUserEmail, String toEmail) async {
+    final contact = (await FirebaseFirestore.instance
+            .collection('contacts')
+            .where('createdBy', isEqualTo: currentUserEmail)
+            .where('email', isEqualTo: toEmail)
+            .get())
+        .docs
+        .map((d) => d.data())
+        .firstOrNull;
+
+    return contact == null ? toEmail : contact['name'].toString();
   }
 }

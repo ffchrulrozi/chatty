@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final receiverEmailProvider =
+final receiverNameProvider =
     Provider<String>((ref) => throw UnimplementedError());
 
 final chatIdProvider = Provider<String>((ref) => throw UnimplementedError());
@@ -28,15 +28,15 @@ final inputChat = StateProvider<String>((ref) => "");
 final sendChatNotifierProvider =
     StateNotifierProvider<SendChatNotifier, void>((ref) {
   final chatId = ref.read(chatIdProvider);
-  final myEmail = ref.read(myEmailProvider);
+  final currentUserEmail = ref.read(currentUserEmailProvider);
 
-  return SendChatNotifier(chatId, myEmail);
+  return SendChatNotifier(chatId, currentUserEmail);
 });
 
 class SendChatNotifier extends StateNotifier<void> {
   final String chatId;
-  final String myEmail;
-  SendChatNotifier(this.chatId, this.myEmail) : super(null);
+  final String currentUserEmail;
+  SendChatNotifier(this.chatId, this.currentUserEmail) : super(null);
   Future<void> send(String text) async {
     final currentUserEmail = FirebaseAuth.instance.currentUser!.email!;
     final currentChat =
