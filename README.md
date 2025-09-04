@@ -1,6 +1,6 @@
-# My Budget
+# Chatty
 
-<p>A financial notes app, write all our daily transaction, both income or outcome, and see it report based on type and date range.</p>
+<p>A messaging app</p>
 <p>There are several libraries used in this app, like: </p>
 <table>
   <thead>
